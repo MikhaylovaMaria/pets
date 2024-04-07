@@ -1,0 +1,31 @@
+.customCard {
+  background-color: #f5f3ee;
+  padding-top: 0rem !important; /* Уменьшенный верхний паддинг */
+  border: 0;
+  margin-bottom: 1.5rem;
+}
+
+.titleRow {
+  margin-bottom: 1rem;
+}
+
+.textAreaTitle {
+  margin-bottom: 0.5rem;
+}
+
+.textAreaDescription {
+  margin-bottom: 0.5rem;
+}
+
+.attachmentRow {
+  display: flex;
+  align-items: center;
+}
+
+.attachmentText {
+  flex: 1;
+}
+
+.attachmentButton {
+  margin-left: 0.5rem;
+}

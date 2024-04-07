@@ -1,0 +1,103 @@
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: blueviolet;
+  font-size: 1rem;
+}
+
+a:hover {
+  color: orange;
+}
+
+header {
+  position: relative;
+  padding: 0 2rem;
+}
+
+.navbar {
+  width: 100%;
+  height: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #FFFDF5;
+}
+.navbar .logo a {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.navbar .links {
+  display: flex;
+  gap: 2rem;
+}
+
+.toggleBtn {
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
+}
+
+.activeBtn {
+  background-color: orange;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: scale 0.2 ease;
+}
+
+.actionbtn:hover {
+  scale: 1.05;
+  color: #fff;
+}
+.activeBtn:active {
+  scale: 0.95;
+}
+
+.dropdownMenu {
+  display: none;
+  position: absolute;
+  right: 2rem;
+  top: 60px;
+  height: 0;
+  width: 300px;
+  background: red;
+  backdrop-filter: blur(15px);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.dropdownMenuOpen {
+  height: auto;
+  background-color: red;
+}
+
+.dropdownMenu li {
+  padding: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 400px) {
+  .navbar .links,
+  .navbar .activeBtn {
+    display: none;
+  }
+  .navbar .toggleBtn {
+    display: block;
+  }
+  .dropdownMenu {
+    display: block;
+  }
+}

@@ -1,26 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useDispatch } from "react-redux";
+import { Paths } from "./path";
+import ArticlePage from "./views/Articles/arcticlesPage";
+import AnnouncementNew from "./views/announcement/announcement";
+import Chats from "./views/chats/chat";
+import { Home } from "./views/home";
+import { Login } from "./views/login";
+import { Register } from "./views/register";
 
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { useEffect } from "react";
+import { fetchCurrentUser } from "./redux/slices/user";
+import { fetchCities } from "./redux/slices/defaultValues";
+import ArticlePageCreate from "./views/Articles/arcticleCreatePage";
+
+const router = createBrowserRouter([
+  {
+    path: Paths.home,
+    element: <Home />,
+  },
+  {
+    path: Paths.login,
+    element: <Login />,
+  },
+  {
+    path: Paths.register,
+    element: <Register />,
+  },
+  {
+    path: Paths.announcement,
+    element: <AnnouncementNew />,
+  },
+  { path: Paths.chats, element: <Chats /> },
+  { path: Paths.articles, element: <ArticlePage /> },
+  { path: Paths.default, element: <Login /> },
+  { path: Paths.сreateArticles, element: <ArticlePageCreate /> },
+]);
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const dispatch = useDispatch<any>();
+  useEffect(() => {
+    dispatch(fetchCurrentUser());
+    dispatch(fetchCities());
+  }, []);
+  return <RouterProvider router={router} />;
 }
 
 export default App;
