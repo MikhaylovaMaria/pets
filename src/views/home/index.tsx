@@ -1,5 +1,5 @@
 import { Layout } from "../../components/layout/layout";
-import { Col, Row, Space } from "antd";
+import { Flex } from "antd";
 
 import SideMenuHome from "../../components/sideMenu/SideMenuHome";
 import { HomeLK } from "../../components/Cards/HomeLK";
@@ -10,53 +10,52 @@ import {
   SearchOutlined,
   TeamOutlined,
   UserOutlined,
+  UsergroupAddOutlined,
 } from "@ant-design/icons";
+import { menuItem } from "../../types/types";
 
 export const Home = () => {
-  const menu = [
+  const menu: menuItem[] = [
     {
       key: "UserOutlined",
       text: "Личные данные",
       icon: <UserOutlined />,
     },
-    { key: "TeamOutlined", text: "Мои друзья", icon: <TeamOutlined /> },
+    { key: "TeamOutlined", text: "Подписки", icon: <TeamOutlined /> },
     { key: "SearchOutlined", text: "Мои объявления", icon: <SearchOutlined /> },
     {
       key: "MessageOutlined",
       text: "Мои сообщения",
       icon: <MessageOutlined />,
     },
+    {
+      key: "UsergroupAddOutlined",
+      text: "Все пользователи",
+      icon: <UsergroupAddOutlined />,
+    },
   ];
-  const [isActive, setIsActive] = useState(menu[0].key);
-
-  const changeActive = (el: any) => {
-    setIsActive(el.key);
-  };
+  const [isActive, setIsActive] = useState<string>(menu[0].key);
 
   return (
     <Layout>
-      <Row
-        align="top"
-        justify="center"
+      <Flex
         style={{
-          height: "100vh",
+          paddingTop: "40px",
           backgroundColor: "#F5F3EE",
-          padding: "46px",
+          height: "100%",
         }}
       >
-        <Space direction="horizontal" style={{ width: "100%" }}>
-          <Col flex="none" style={{ display: "flex", alignItems: "stretch" }}>
-            <SideMenuHome
-              menu={menu}
-              isActive={isActive}
-              onChange={changeActive}
-            />
-          </Col>
-          <Col flex="auto" style={{ display: "flex", alignItems: "stretch" }}>
-            <HomeLK />
-          </Col>
-        </Space>
-      </Row>
+        <Flex align="flex-start" style={{ paddingLeft: "40px" }}>
+          <SideMenuHome
+            menu={menu}
+            isActive={isActive}
+            setIsActive={setIsActive}
+          />
+        </Flex>
+        <Flex justify="flex-start" align="flex-start">
+          <HomeLK />
+        </Flex>
+      </Flex>
     </Layout>
   );
 };

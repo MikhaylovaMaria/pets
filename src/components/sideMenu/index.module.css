@@ -1,5 +1,8 @@
 .active {
   color: #3b3632;
+  background-color: #d8d5cf;
+  border-radius: 0.5rem;
+  border: 2px solid #f5f3ee;
 }
 
 .nonActive {

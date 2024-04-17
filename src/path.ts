@@ -5,8 +5,7 @@ export const Paths = {
   login: "/login",
   register: "/register",
   announcement: "/announcement",
-  chats: "/chats",
+  chats: "/chat",
   articles: "/articles",
   сreateArticles: "/articleCreate",
-  chatforum: "/chat",
 } as const;

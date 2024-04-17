@@ -7,10 +7,7 @@ import {
   ZoomControl,
 } from "@pbe/react-yandex-maps";
 import PlacemarkComponent from "./Placemark";
-import SideMenu from "../sideMenu/SideMenu";
 import { Layout } from "antd";
-import Sider from "antd/es/layout/Sider";
-import { Content } from "antd/es/layout/layout";
 
 interface Coordinates {
   lat: number;
@@ -40,17 +37,9 @@ export const MapComponent1: React.FC = () => {
 
   return (
     <Layout>
-      <Sider width="15vw" style={{ backgroundColor: "#D2B48C" }}>
-        <SideMenu />
-      </Sider>
-      <Content>
+      <div id="map" style={{ width: "100%", height: "100%" }}>
         <YMaps>
-          <Map
-            defaultState={mapState}
-            onClick={handleMapClick}
-            width="65vw"
-            height="80vh"
-          >
+          <Map defaultState={mapState} onClick={handleMapClick}>
             {placemarks.map((placemark, index) => (
               <PlacemarkComponent
                 key={index}
@@ -62,7 +51,7 @@ export const MapComponent1: React.FC = () => {
             <ZoomControl />
           </Map>
         </YMaps>
-      </Content>
+      </div>
     </Layout>
   );
 };

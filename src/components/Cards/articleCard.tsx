@@ -1,4 +1,4 @@
-import { Card, Col, Image, Row, Space, Typography } from "antd";
+import { Card, Col, Flex, Image, Row, Space, Typography } from "antd";
 import styles from "./index.module.css";
 import { useState } from "react";
 import Meta from "antd/es/card/Meta";
@@ -7,6 +7,9 @@ import { Link } from "react-router-dom";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { currentUserId } from "../../redux/slices/user";
+import { format } from "timeago.js";
+import "../../utils/dataTyme";
+import CustomCarousel from "../Carousel/carousel";
 const { Text, Paragraph } = Typography;
 
 interface Article {
@@ -24,16 +27,9 @@ interface Props {
 
 export const ArticlePrevCard = ({ article }: Props) => {
   const userId = useSelector(currentUserId);
-  // console.log(userId);
 
-  const rows = 5;
+  const rows = 3;
   const [expanded, setExpanded] = useState(false);
-  const createdDate = new Date(article.createdAt);
-  // console.log(article);
-
-  const formattedDate = `${createdDate.getDate()}.${
-    createdDate.getMonth() + 1
-  }.${createdDate.getFullYear()}`;
 
   return (
     <Card
@@ -43,28 +39,26 @@ export const ArticlePrevCard = ({ article }: Props) => {
           {article.title}
           <Meta
             description={
-              <Typography>
-                <Row>
-                  <Col span={23}>
-                    <Space direction="vertical">
-                      <Link to={Paths.articles}>
-                        <Text style={{ color: "#3B3632" }}>
-                          {article.User.firstName + " " + article.User.lastName}{" "}
-                        </Text>
-                      </Link>
-                      <Text style={{ color: "#7E746B" }}>{formattedDate}</Text>
+              <Flex vertical={true}>
+                <Typography>
+                  <Space.Compact direction="vertical">
+                    <Link to={Paths.articles}>
+                      <Text style={{ color: "#3B3632" }}>
+                        {article.User.firstName + " " + article.User.lastName}
+                      </Text>
+                    </Link>
+                    <Text style={{ color: "#7E746B" }}>
+                      {format(article.createdAt, "ru")}
+                    </Text>
+                  </Space.Compact>
+                  {userId === article.User.userId && (
+                    <Space>
+                      <EditOutlined />
+                      <DeleteOutlined />
                     </Space>
-                  </Col>
-                  <Col span={1}>
-                    {userId === article.User.userId && (
-                      <Space>
-                        <EditOutlined />
-                        <DeleteOutlined />
-                      </Space>
-                    )}
-                  </Col>
-                </Row>
-              </Typography>
+                  )}
+                </Typography>
+              </Flex>
             }
           />
         </Typography.Title>
@@ -84,12 +78,7 @@ export const ArticlePrevCard = ({ article }: Props) => {
             }}
           >
             {article.description}
-            {article.photos &&
-              article.photos.map((photo, index) => (
-                <Row justify="center">
-                  <Image width={350} key={index} src={photo} />
-                </Row>
-              ))}
+            {article.photos && <CustomCarousel images={article.photos} />}
           </Paragraph>
         </Space>
       </Row>

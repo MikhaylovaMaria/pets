@@ -24,9 +24,9 @@ a {
   height: 85vh;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1500px) {
   body {
-    width: 1200px;
+    width: 1500px;
     margin: 0 auto;
     height: 100vh;
   }

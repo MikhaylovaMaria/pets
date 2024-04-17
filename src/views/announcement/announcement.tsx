@@ -6,6 +6,8 @@ import CustomTextAria from "../../components/FormCustom/custom-textAria.tsx/cust
 import { CustomButton } from "../../components/FormCustom/custom-button/customButton";
 import { optionsAnnouncement } from "../../utils/helperData";
 import CustomUpload from "../../components/FormCustom/custom-upload/customUpload";
+import { MapComponent } from "../../components/MapComponent/map";
+import { MapComponent1 } from "../../components/MapComponent/index1";
 
 interface FormData {
   type: string;
@@ -77,43 +79,44 @@ const AnnouncementNew = () => {
   ];
 
   const items = steps.map((item) => ({ key: item.title, title: item.title }));
-  console.log(formData);
 
   return (
     <Layout>
-      <Row align="middle" justify="center" style={{ paddingTop: "20px" }}>
-        <Card
-          style={{
-            backgroundColor: "#D2B48C",
-            width: "50vw",
-          }}
-        >
-          <Steps current={current} items={items} />
-          <div>{steps[current].content}</div>
-          <Row style={{ marginTop: 24 }}>
-            {current < steps.length - 1 && formData.type !== "" && (
-              <CustomButton type="primary" onClick={() => next()}>
-                Далее
-              </CustomButton>
-            )}
-            <Space>
-              {current === steps.length - 1 && (
-                <CustomButton
-                  type="primary"
-                  onClick={() => message.success("Processing complete!")}
-                >
-                  Создать
-                </CustomButton>
-              )}
-              {current > 0 && (
-                <CustomButton onClick={() => prev()}>Назад</CustomButton>
-              )}
-            </Space>
-          </Row>
-        </Card>
-      </Row>
+      <MapComponent1/>
     </Layout>
   );
 };
 
 export default AnnouncementNew;
+
+/* <Row align="middle" justify="center" style={{ paddingTop: "20px" }}>
+<Card
+  style={{
+    backgroundColor: "#D2B48C",
+    width: "50vw",
+  }}
+>
+  <Steps current={current} items={items} />
+  <div>{steps[current].content}</div>
+  <Row style={{ marginTop: 24 }}>
+    {current < steps.length - 1 && formData.type !== "" && (
+      <CustomButton type="primary" onClick={() => next()}>
+        Далее
+      </CustomButton>
+    )}
+    <Space>
+      {current === steps.length - 1 && (
+        <CustomButton
+          type="primary"
+          onClick={() => message.success("Processing complete!")}
+        >
+          Создать
+        </CustomButton>
+      )}
+      {current > 0 && (
+        <CustomButton onClick={() => prev()}>Назад</CustomButton>
+      )}
+    </Space>
+  </Row>
+</Card>
+</Row> */

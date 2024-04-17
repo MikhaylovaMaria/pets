@@ -9,6 +9,7 @@ import {
   type FormProps,
   Col,
   DatePicker,
+  Flex,
 } from "antd";
 import { PasswordInput } from "../../components/FormCustom/password-input/passwordInput";
 import { CustomButton } from "../../components/FormCustom/custom-button/customButton";
@@ -20,7 +21,7 @@ import { useState } from "react";
 import CustomSelectCity from "../../components/FormCustom/custom-select/customSelectCity";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { fetchRegister } from "../../redux/slices/user";
+import { fetchRegister, selectisAuth } from "../../redux/slices/user";
 
 type FieldType = {
   firstName: string;
@@ -35,6 +36,7 @@ type FieldType = {
 
 export const Register = () => {
   const dispatch = useDispatch<any>();
+  const isAuth = useSelector(selectisAuth);
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     const data = await dispatch(
@@ -65,9 +67,13 @@ export const Register = () => {
   const onChange = (e: RadioChangeEvent) => {
     setValue(e.target.value);
   };
+  if (isAuth) {
+    return <Navigate to={Paths.home} />;
+  }
+
   return (
     <Layout headerView={true}>
-      <Row align="middle" justify="center">
+      <Flex justify="center" align="center">
         <Card
           title={
             <Typography.Title level={3} style={{ textAlign: "center" }}>
@@ -75,10 +81,9 @@ export const Register = () => {
             </Typography.Title>
           }
           style={{
-            width: "80%",
+            width: "90%",
             backgroundColor: "#FFFDF5",
-            marginTop: "10%", // пофиксить стили для отображения
-            // textAlign: "center", ПРИМЕНЯЕТСЯ КО ВСЕЙ КАРТОЧКЕ, А НУЖНО ТОЛЬКО К TITLE
+            // marginTop: "10%", // пофиксить стили для отображения
           }}
         >
           <p style={{ textAlign: "start" }}>Личные данные</p>
@@ -99,7 +104,6 @@ export const Register = () => {
                 />
               </Col>
             </Row>
-
             <Row gutter={[8, 16]}>
               <Col xs={24} sm={12}>
                 <CustomSelectCity />
@@ -118,7 +122,6 @@ export const Register = () => {
                 />
               </Col>
             </Row>
-
             <CustomInput type="email" name="email" placeholder="Email" />
             <Row gutter={[8, 16]}>
               <Col xs={24} sm={12}>
@@ -149,7 +152,7 @@ export const Register = () => {
             </Space>
           </div>
         </Card>
-      </Row>
+      </Flex>
     </Layout>
   );
 };
