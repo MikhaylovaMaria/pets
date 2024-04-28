@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../axios";
+import { Article } from "../../types/types";
 
 export const fetchArticles = createAsyncThunk(
   "articles/fetchArticles",
@@ -24,23 +25,24 @@ export const createArticle = createAsyncThunk<any>(
 //   photos?: string[] | [];
 // };
 
-interface Article {
-  articleId: string;
-  title: string;
-  description: string;
-  articleStatusId?: string | null;
-  photos?: string[] | [];
-  createdAt: Date;
-  updatedAt: Date;
-  User: {
-    userId: string;
-    lastName: string;
-    firstName: string;
-  };
-}
+// interface Article {
+//   articleId: string;
+//   title: string;
+//   description: string;
+//   articleStatusId?: string | null;
+//   photos?: string[] | [];
+//   createdAt: Date;
+//   updatedAt: Date;
+//   userId: string;
+//   User?: {
+//     userId: string;
+//     lastName: string;
+//     firstName: string;
+//   };
+// }
 
 interface ArticleState {
-  articles: Article[] | null;
+  articles: Article[] | [];
   status: string;
 }
 
@@ -70,18 +72,18 @@ const articleSlice = createSlice({
       .addCase(createArticle.pending, (state: ArticleState) => {
         state.articles = [];
         state.status = "loading creating";
-      })
-      .addCase(createArticle.fulfilled, (state: ArticleState, action) => {
-        if (state.articles === null) {
-          state.articles = [action.payload];
-        } else {
-          state.articles.push(action.payload);
-        }
-        state.status = "loaded";
-      })
-      .addCase(createArticle.rejected, (state) => {
-        state.status = "error create";
       });
+    // .addCase(createArticle.fulfilled, (state: ArticleState, action) => {
+    //   if (state.articles === null) {
+    //     state.articles = [action.payload];
+    //   } else {
+    //     state.articles.push(action.payload);
+    //   }
+    //   state.status = "loaded";
+    // })
+    // .addCase(createArticle.rejected, (state) => {
+    //   state.status = "error create";
+    // });
   },
 });
 

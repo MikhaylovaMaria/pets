@@ -1,62 +1,57 @@
-import { Card, Col, Flex, Image, Row, Space, Typography } from "antd";
+import { Card, Flex, Image, Space, Typography } from "antd";
 import styles from "./index.module.css";
-import { useState } from "react";
-import Meta from "antd/es/card/Meta";
-import { Paths } from "../../path";
-import { Link } from "react-router-dom";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { useSelector } from "react-redux";
-import { currentUserId } from "../../redux/slices/user";
-import { format } from "timeago.js";
+
 import "../../utils/dataTyme";
-import CustomCarousel from "../Carousel/carousel";
-const { Text, Paragraph } = Typography;
+import { format } from "timeago.js";
 
-interface Article {
-  title: string;
-  createdAt: Date;
-  photos?: string[];
-  description: string;
-  User: { firstName: string; lastName: string; userId: string };
-  articleId: string;
-}
+import Meta from "antd/es/card/Meta";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { NavLink } from "react-router-dom";
+import { Article } from "../../types/types";
 
-interface Props {
+const { Text } = Typography;
+
+type Props = {
   article: Article;
-}
+};
 
-export const ArticlePrevCard = ({ article }: Props) => {
-  const userId = useSelector(currentUserId);
-
-  const rows = 3;
-  const [expanded, setExpanded] = useState(false);
+export const ArticleCard = ({ article }: Props) => {
+  const userId = localStorage.getItem("userId");
 
   return (
     <Card
-      className={styles.article}
+      key={article.articleId}
       title={
-        <Typography.Title level={2} style={{ color: "#3B3632", margin: 0 }}>
-          {article.title}
+        <Typography.Title level={3} style={{ color: "#3B3632", margin: 0 }}>
+          <Flex justify="space-between">
+            {article.title}
+            {userId === article.userId && (
+              <Space>
+                <EditOutlined />
+                <DeleteOutlined />
+              </Space>
+            )}
+          </Flex>
+
           <Meta
             description={
               <Flex vertical={true}>
                 <Typography>
                   <Space.Compact direction="vertical">
-                    <Link to={Paths.articles}>
-                      <Text style={{ color: "#3B3632" }}>
-                        {article.User.firstName + " " + article.User.lastName}
-                      </Text>
-                    </Link>
+                    {article.User?.userId && (
+                      <NavLink
+                        to={`/${article.User.userId}`}
+                        key={article.articleId}
+                      >
+                        <Text style={{ color: "#3B3632" }}>
+                          {article.User.firstName + " " + article.User.lastName}
+                        </Text>
+                      </NavLink>
+                    )}
                     <Text style={{ color: "#7E746B" }}>
                       {format(article.createdAt, "ru")}
                     </Text>
                   </Space.Compact>
-                  {userId === article.User.userId && (
-                    <Space>
-                      <EditOutlined />
-                      <DeleteOutlined />
-                    </Space>
-                  )}
                 </Typography>
               </Flex>
             }
@@ -64,24 +59,22 @@ export const ArticlePrevCard = ({ article }: Props) => {
         </Typography.Title>
       }
       style={{
+        margin: "5px",
         backgroundColor: "#FFFDF5",
+        width: "100%",
       }}
     >
-      <Row key={article.articleId}>
-        <Space direction="vertical">
-          <Paragraph
-            ellipsis={{
-              rows,
-              expandable: true,
-              symbol: "Развернуть",
-              onExpand: (expanded) => setExpanded(!expanded),
-            }}
-          >
-            {article.description}
-            {article.photos && <CustomCarousel images={article.photos} />}
-          </Paragraph>
-        </Space>
-      </Row>
+      <Space direction="vertical" style={{ width: "100%" }}>
+        {<Typography.Text>{article.description}</Typography.Text>}
+        <Flex justify="center">
+          <Space key={article.articleId} size="small" direction="horizontal">
+            {article.photos.length > 0 &&
+              article.photos.map((a) => (
+                <Image src={a} width={`100/${article.photos.length}%`} />
+              ))}
+          </Space>
+        </Flex>
+      </Space>
     </Card>
   );
 };

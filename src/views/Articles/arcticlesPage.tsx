@@ -3,13 +3,13 @@ import { fetchArticles } from "../../redux/slices/articles";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { Card, Flex, Row, Typography } from "antd";
-import { ArticlePrevCard } from "../../components/Cards/articleCard";
+import { ArticlePrevCard } from "../../components/Cards/ArticlePrevCard";
 import styles from "./index.module.css";
 import { CustomButton } from "../../components/FormCustom/custom-button/customButton";
 import PaginationFoot from "../../components/pagination/pagination";
 import { Layout } from "../../components/layout/layout";
-import { Link } from "react-router-dom";
-import { Paths } from "../../path";
+import { NavLink } from "react-router-dom";
+import { ArticleCard } from "../../components/Cards/articleCard";
 
 //ПОПРАВИТЬ ТИПЫ
 const ArticlePage = () => {
@@ -32,7 +32,7 @@ const ArticlePage = () => {
         >
           <Typography.Title level={1} style={{ position: "sticky" }}>
             Блог
-            <Link to={Paths.сreateArticles}>
+            <NavLink to={`/createArticle`}>
               <CustomButton
                 type="primary"
                 htmlType="submit"
@@ -42,7 +42,7 @@ const ArticlePage = () => {
               >
                 Создать статью
               </CustomButton>
-            </Link>
+            </NavLink>
           </Typography.Title>
           <Flex vertical={true}>
             {isArticlesLoading
@@ -54,7 +54,7 @@ const ArticlePage = () => {
                   />
                 ))
               : articles?.map((ar) => (
-                  <ArticlePrevCard key={ar.articleId} article={ar} />
+                  <ArticleCard key={ar.articleId} article={ar} />
                 ))}
           </Flex>
           <Flex justify="center" align="flex-end">

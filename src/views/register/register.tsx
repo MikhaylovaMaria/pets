@@ -13,8 +13,8 @@ import {
 } from "antd";
 import { PasswordInput } from "../../components/FormCustom/password-input/passwordInput";
 import { CustomButton } from "../../components/FormCustom/custom-button/customButton";
-import { Link } from "react-router-dom";
-import { Paths } from "../../path";
+import { NavLink } from "react-router-dom";
+
 import { CustomRadio } from "../../components/FormCustom/custom-radio/radio-button";
 import type { RadioChangeEvent } from "antd";
 import { useState } from "react";
@@ -22,6 +22,7 @@ import CustomSelectCity from "../../components/FormCustom/custom-select/customSe
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { fetchRegister, selectisAuth } from "../../redux/slices/user";
+import { AppDispatch } from "../../redux/store";
 
 type FieldType = {
   firstName: string;
@@ -35,7 +36,7 @@ type FieldType = {
 };
 
 export const Register = () => {
-  const dispatch = useDispatch<any>();
+  const dispatch: AppDispatch = useDispatch();
   const isAuth = useSelector(selectisAuth);
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
@@ -46,6 +47,7 @@ export const Register = () => {
       alert("Не удалось зарегистрироваться");
     } else if ("token" in data.payload) {
       window.localStorage.setItem("token", data.payload.token);
+      window.localStorage.setItem("userId", data.payload.userId);
     }
   };
 
@@ -68,7 +70,7 @@ export const Register = () => {
     setValue(e.target.value);
   };
   if (isAuth) {
-    return <Navigate to={Paths.home} />;
+    return <Navigate to={`/${isAuth.userId}`} />;
   }
 
   return (
@@ -147,7 +149,8 @@ export const Register = () => {
           <div style={{ textAlign: "start" }}>
             <Space direction="vertical">
               <Typography.Text>
-                Есть аккаунт? <Link to={Paths.login}>Войти</Link>
+                Есть аккаунт?
+                <NavLink to="\">Войти</NavLink>
               </Typography.Text>
             </Space>
           </div>

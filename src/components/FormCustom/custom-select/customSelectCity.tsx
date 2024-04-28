@@ -3,13 +3,14 @@ import { Form, Select } from "antd";
 import type { SelectProps } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { citiesAll, fetchCities } from "../../../redux/slices/defaultValues";
+import { AppDispatch } from "../../../redux/store";
 
 // const handleChange = (value: string) => {
 //   console.log(`selected ${value}`);
 // };
 
 const CustomSelectCity: React.FC = () => {
-  const dispatch = useDispatch<any>();
+  const dispatch: AppDispatch = useDispatch();
   const cities = useSelector(citiesAll);
   useEffect(() => {
     dispatch(fetchCities());

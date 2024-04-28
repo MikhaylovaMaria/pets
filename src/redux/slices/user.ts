@@ -61,11 +61,11 @@ export const fetchCurrentUser = createAsyncThunk(
 export const fetchRegister = createAsyncThunk(
   "user/fetchRegister",
   async (params: registerParam) => {
-    console.log(params);
     const { data } = await axios.post("/register", params);
     return data;
   }
 );
+
 
 const userSlice = createSlice({
   name: "CurrentUser",

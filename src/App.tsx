@@ -1,46 +1,87 @@
-import { useDispatch, useSelector } from "react-redux";
-import { Paths } from "./path";
+import { useDispatch } from "react-redux";
 import ArticlePage from "./views/Articles/arcticlesPage";
-import AnnouncementNew from "./views/announcement/announcement";
-import Chats from "./views/chats/chat";
-import { Home } from "./views/home";
-import { Login } from "./views/login";
-import { Register } from "./views/register";
+import AnnouncementNew from "./views/announcement/AnnouncementNew";
+
+import { Login } from "./views/login/login";
+import { Register } from "./views/register/register";
 
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useEffect } from "react";
-import { fetchCurrentUser, selectisAuth } from "./redux/slices/user";
+import { fetchCurrentUser } from "./redux/slices/user";
 import { fetchCities } from "./redux/slices/defaultValues";
 import ArticlePageCreate from "./views/Articles/arcticleCreatePage";
+import { fetchAnnouncementsTypes } from "./redux/slices/announcements";
+import AnnouncementMap from "./views/announcement/announcementInMap";
+import AllUsersPage from "./views/home/allUsersPage";
+import UserPage from "./views/home/userPage";
+import UserChats from "./views/home/userChats";
+import { AppDispatch } from "./redux/store";
 
 const router = createBrowserRouter([
   {
-    path: Paths.home,
-    element: <Home />,
+    path: "/",
+    errorElement: <h1>ERROR</h1>,
+    children: [
+      {
+        index: true,
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: ":userId",
+        children: [
+          {
+            index: true,
+            element: <UserPage />,
+          },
+        ],
+      },
+      {
+        path: "announcements",
+        element: <AnnouncementMap />,
+      },
+      {
+        path: "createAnnouncement",
+        element: <AnnouncementNew />,
+        errorElement: <h1>Errr</h1>,
+      },
+      {
+        path: "articles",
+        element: <ArticlePage />,
+        children: [
+          {
+            path: ":articleId",
+            element: <h1>ARTICLE</h1>,
+          },
+        ],
+      },
+      {
+        path: "createArticle",
+        element: <ArticlePageCreate />,
+        errorElement: <h1>Errr</h1>,
+      },
+
+      {
+        path: "chats",
+        element: <UserChats />,
+      },
+      {
+        path: "allUsers",
+        element: <AllUsersPage />,
+      },
+    ],
   },
-  {
-    path: Paths.login,
-    element: <Login />,
-  },
-  {
-    path: Paths.register,
-    element: <Register />,
-  },
-  {
-    path: Paths.announcement,
-    element: <AnnouncementNew />,
-  },
-  { path: Paths.chats, element: <Chats /> },
-  { path: Paths.articles, element: <ArticlePage /> },
-  { path: Paths.default, element: <Login /> },
-  { path: Paths.сreateArticles, element: <ArticlePageCreate /> },
 ]);
+
 function App() {
-  const isAuth = useSelector(selectisAuth);
-  const dispatch = useDispatch<any>();
+  const dispatch: AppDispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchCurrentUser());
     dispatch(fetchCities());
+    dispatch(fetchAnnouncementsTypes());
   }, []);
 
   return <RouterProvider router={router} />;

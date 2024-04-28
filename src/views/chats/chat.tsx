@@ -97,39 +97,37 @@ const Chats = () => {
   };
 
   return (
-    <Layout>
-      <div style={{ backgroundColor: "#BDBDBD" }}>
-        <div className="Chat">
-          <div className="Left-side-chat">
-            <div className="Chat-container">
-              <h2>Диалоги</h2>
-              <div className="Chat-list">
-                {chats?.map((chat) => (
-                  <div key={chat.chatId}>
-                    <div onClick={() => setCurrentChat(chat)}>
-                      <Conversation
-                        data={chat}
-                        currentUserId={user?.userId}
-                        online={checkOnlineStatus(chat)}
-                      />
-                    </div>
+    <div style={{ backgroundColor: "#BDBDBD", width: "100%" }}>
+      <div className="Chat">
+        <div className="Left-side-chat">
+          <div className="Chat-container">
+            <h2>Диалоги</h2>
+            <div className="Chat-list">
+              {chats?.map((chat) => (
+                <div key={chat.chatId}>
+                  <div onClick={() => setCurrentChat(chat)}>
+                    <Conversation
+                      data={chat}
+                      currentUserId={user?.userId}
+                      online={checkOnlineStatus(chat)}
+                    />
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
+        </div>
 
-          <div className="Right-side-chat">
-            <ChatBox
-              chat={currentChat}
-              currentUser={user?.userId}
-              setSendMessage={setSendMessage}
-              recieveMessage={recieveMessage}
-            />
-          </div>
+        <div className="Right-side-chat">
+          <ChatBox
+            chat={currentChat}
+            currentUser={user?.userId}
+            setSendMessage={setSendMessage}
+            recieveMessage={recieveMessage}
+          />
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 

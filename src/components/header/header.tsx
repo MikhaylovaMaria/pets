@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Space, Typography } from "antd";
-import { Link } from "react-router-dom";
-import { Paths } from "../../path";
+import { NavLink } from "react-router-dom";
+
 import { DownOutlined, MenuOutlined } from "@ant-design/icons";
 import styles from "./index.module.css";
-import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { currentUserId } from "../../redux/slices/user";
 
 const CustomBreadcrumb = () => {
   const [showMenu, setShowMenu] = useState(true);
   const [showProfilemenu, setProfileMenu] = useState(true);
+
+  const currentId = useSelector(currentUserId);
 
   const openMenu = () => {
     setShowMenu(!showMenu);
@@ -24,21 +27,19 @@ const CustomBreadcrumb = () => {
   };
 
   const mainLinks: mainLinks[] = [
-    { path: Paths.announcement, title: "Объявления", key: "announcement" },
-    { path: Paths.articles, title: "Образования", key: "articles" },
-    { path: Paths.chats, title: "Форум", key: "chat" },
+    { path: `/announcements`, title: "Объявления", key: "announcement" },
+    { path: `/articles`, title: "Образования", key: "articles" },
+    { path: `/chats`, title: "Форум", key: "chat" },
+    // { path: `/${currentId}`, title: "Моя страница", key: "Профиль" },
   ];
 
   const profileLinks: mainLinks[] = [
-    { path: Paths.home, title: "Моя страница", key: "Профиль" },
-    { path: Paths.chats, title: "Сообщения", key: "Профиль" },
-    { path: Paths.home, title: "Выход", key: "Профиль" },
+    { path: `${currentId}`, title: "Моя страница", key: "Профиль" },
+    { path: `${currentId}`, title: "Сообщения", key: "Профиль" },
+    { path: `${currentId}`, title: "Выход", key: "Профиль" },
   ];
-  const location = useLocation();
-  const pathname = location.pathname;
-  const parts = pathname.split("/");
 
-  const [currentLink, setCurrentLink] = useState(parts[parts.length - 1]);
+  const [currentLink, setCurrentLink] = useState("Профиль");
 
   return (
     <>
@@ -64,11 +65,11 @@ const CustomBreadcrumb = () => {
               }}
               className={link.key === currentLink ? styles.activeBtn : ""}
             >
-              <Link to={link.path}>
+              <NavLink to={link.path} end>
                 <Typography.Title level={4} style={{ marginBottom: "0" }}>
                   {link.title}
                 </Typography.Title>
-              </Link>
+              </NavLink>
             </li>
           ))}
           <li
@@ -91,16 +92,16 @@ const CustomBreadcrumb = () => {
       <div className={showMenu ? styles.dropdownMenu : styles.dropdownMenuOpen}>
         {mainLinks.map((link, index) => (
           <li key={index}>
-            <Link to={link.path}>
+            <NavLink to={link.path}>
               <Typography.Title level={5}>{link.title}</Typography.Title>
-            </Link>
+            </NavLink>
           </li>
         ))}
         {profileLinks.map((link, index) => (
           <li key={index} onClick={() => setCurrentLink("Профиль")}>
-            <Link to={link.path}>
+            <NavLink to={link.path}>
               <Typography.Title level={5}>{link.title}</Typography.Title>
-            </Link>
+            </NavLink>
           </li>
         ))}
       </div>
@@ -108,9 +109,9 @@ const CustomBreadcrumb = () => {
         <div className={styles.dropdownMenuProfileOpen}>
           {profileLinks.map((link, index) => (
             <li key={index} onClick={() => setCurrentLink("Профиль")}>
-              <Link to={link.path}>
+              <NavLink to={link.path}>
                 <Typography.Title level={5}>{link.title}</Typography.Title>
-              </Link>
+              </NavLink>
             </li>
           ))}
         </div>

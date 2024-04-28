@@ -6,8 +6,8 @@ import CustomUpload from "../../components/FormCustom/custom-upload/customUpload
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { Paths } from "../../path";
 import { selectisAuth } from "../../redux/slices/user";
+import { AppDispatch } from "../../redux/store";
 
 interface FormData {
   title: string;
@@ -16,7 +16,7 @@ interface FormData {
 }
 
 const ArticlePageCreate = () => {
-  const dispatch = useDispatch<any>();
+  const dispatch: AppDispatch = useDispatch();
   const isAuth = useSelector(selectisAuth);
 
   const handleChange = (name: string, value: any) => {
@@ -34,8 +34,8 @@ const ArticlePageCreate = () => {
   };
 
   const onFinish: FormProps<FormData>["onFinish"] = async () => {
-    const data = await dispatch(formData);
-    console.log(data);
+    // const data = await dispatch(formData);
+    // console.log(data);
   };
 
   const onFinishFailed: FormProps<FormData>["onFinishFailed"] = (errorInfo) => {
@@ -43,7 +43,7 @@ const ArticlePageCreate = () => {
   };
 
   if (!window.localStorage.getItem("token") && isAuth) {
-    return <Navigate to={Paths.home} />;
+    // return <Navigate to={Paths.home} />;
   }
 
   return (

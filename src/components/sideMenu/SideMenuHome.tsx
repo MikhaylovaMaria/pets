@@ -3,14 +3,34 @@ import Sider from "antd/es/layout/Sider";
 import { Space, Typography } from "antd";
 import styles from "./index.module.css";
 import { menuItem } from "../../types/types";
+import { NavLink, useLocation } from "react-router-dom";
+import { MessageOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
 
-type Props = {
-  menu: menuItem[];
-  isActive: string;
-  setIsActive: React.Dispatch<React.SetStateAction<string>>;
-};
+const SideMenuHome = () => {
+  const userId = localStorage.getItem("userId");
+  const loc = useLocation();
 
-const SideMenuHome = ({ menu, isActive, setIsActive }: Props) => {
+  const menu: menuItem[] = [
+    {
+      key: "UserOutlined",
+      text: "Моя страница",
+      icon: <UserOutlined />,
+      link: `/${userId}`,
+    },
+    {
+      key: "TeamOutlined",
+      text: "Подписки",
+      icon: <TeamOutlined />,
+      link: "/allUsers",
+    },
+    {
+      key: "MessageOutlined",
+      text: "Мои сообщения",
+      icon: <MessageOutlined />,
+      link: "/chats",
+    },
+  ];
+
   return (
     <Sider
       style={{
@@ -26,18 +46,20 @@ const SideMenuHome = ({ menu, isActive, setIsActive }: Props) => {
         }}
       >
         {menu.map((el) => (
-          <li onClick={() => setIsActive(el.key)}>
+          <NavLink to={`${el.link}`}>
             <Typography.Title
               level={5}
               key={el.key}
-              className={el.key === isActive ? styles.active : styles.nonActive}
+              className={
+                loc.pathname === el.link ? styles.active : styles.nonActive
+              }
             >
               <Space direction="horizontal">
                 {el.icon}
                 {el.text}
               </Space>
             </Typography.Title>
-          </li>
+          </NavLink>
         ))}
       </div>
     </Sider>

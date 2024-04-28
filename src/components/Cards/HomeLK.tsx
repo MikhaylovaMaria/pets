@@ -1,14 +1,19 @@
-import { Card, Flex, Image, Space, Typography } from "antd";
+import { Button, Card, Flex, Image, Space, Typography } from "antd";
 import { cityNameById } from "../../redux/slices/defaultValues";
 import { useSelector } from "react-redux";
-import { selectisAuth } from "../../redux/slices/user";
 import { format } from "timeago.js";
 import "../../utils/dataTyme";
 import { EditOutlined } from "@ant-design/icons";
+import { User } from "../../types/types";
 const { Text } = Typography;
 
-export const HomeLK = () => {
-  const currentUser = useSelector(selectisAuth);
+type Props = {
+  currentUser: User;
+};
+
+export const HomeLK = ({ currentUser }: Props) => {
+  const mainUserId = localStorage.getItem("userId");
+
   const cityId = currentUser?.cityId;
 
   const formatedDate = (date: string) => {
@@ -33,16 +38,17 @@ export const HomeLK = () => {
         <Typography.Title level={2} style={{ color: "#3B3632", margin: 0 }}>
           <Flex justify="space-between">
             Личные данные
-            <EditOutlined />
+            {currentUser.userId === mainUserId && <EditOutlined />}
           </Flex>
         </Typography.Title>
       }
       style={{
         backgroundColor: "#FFFDF5",
+        width: "100%",
       }}
     >
       <Flex>
-        <Flex justify="flex-start" align="flex-start" style={{ width: "25%" }}>
+        <Flex justify="flex-start" align="flex-start" style={{ width: "20%" }}>
           <Image
             // style={{ height: "25%", width: "25%", objectFit: "contain" }}
             src={
@@ -54,7 +60,7 @@ export const HomeLK = () => {
         <Flex
           justify="flex-start"
           align="flex-start"
-          style={{ marginLeft: "1rem" }}
+          style={{ marginLeft: "1rem", width: "75%" }}
         >
           <Space direction="vertical">
             <Typography.Title level={4} style={{ color: "#3B3632" }}>
