@@ -4,10 +4,8 @@ import AnnouncementNew from "./views/announcement/AnnouncementNew";
 
 import { Login } from "./views/login/login";
 import { Register } from "./views/register/register";
-
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useEffect } from "react";
-import { fetchCurrentUser } from "./redux/slices/user";
 import { fetchCities } from "./redux/slices/defaultValues";
 import ArticlePageCreate from "./views/Articles/arcticleCreatePage";
 import { fetchAnnouncementsTypes } from "./redux/slices/announcements";
@@ -16,19 +14,25 @@ import AllUsersPage from "./views/home/allUsersPage";
 import UserPage from "./views/home/userPage";
 import UserChats from "./views/home/userChats";
 import { AppDispatch } from "./redux/store";
+import { Root } from "./views/root/root";
+import { isAuthLoader } from "./utils/helper";
+import AdminPage from "./views/admin/adminPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <Root />,
     errorElement: <h1>ERROR</h1>,
     children: [
       {
         index: true,
         element: <Login />,
+        loader: isAuthLoader,
       },
       {
         path: "register",
         element: <Register />,
+        loader: isAuthLoader,
       },
       {
         path: ":userId",
@@ -74,12 +78,15 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "admin",
+    element: <AdminPage />,
+  },
 ]);
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchCurrentUser());
     dispatch(fetchCities());
     dispatch(fetchAnnouncementsTypes());
   }, []);

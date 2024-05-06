@@ -6,19 +6,14 @@ import { DownOutlined, MenuOutlined } from "@ant-design/icons";
 import styles from "./index.module.css";
 import { useSelector } from "react-redux";
 import { currentUserId } from "../../redux/slices/user";
+import MediaQuery from "react-responsive";
 
 const CustomBreadcrumb = () => {
-  const [showMenu, setShowMenu] = useState(true);
-  const [showProfilemenu, setProfileMenu] = useState(true);
+  const [showMenu, setShowMenu] = useState(false);
+
+  const [currentLink, setCurrentLink] = useState("Профиль");
 
   const currentId = useSelector(currentUserId);
-
-  const openMenu = () => {
-    setShowMenu(!showMenu);
-  };
-  const openMenuProfile = () => {
-    setProfileMenu(!showProfilemenu);
-  };
 
   type mainLinks = {
     path: string;
@@ -26,20 +21,17 @@ const CustomBreadcrumb = () => {
     key: string;
   };
 
-  const mainLinks: mainLinks[] = [
+  const mainLink: mainLinks[] = [
     { path: `/announcements`, title: "Объявления", key: "announcement" },
-    { path: `/articles`, title: "Образования", key: "articles" },
+    { path: `/articles`, title: "Образование", key: "articles" },
+    { path: `/admin`, title: "Админ", key: "админ" },
     { path: `/chats`, title: "Форум", key: "chat" },
-    // { path: `/${currentId}`, title: "Моя страница", key: "Профиль" },
   ];
 
   const profileLinks: mainLinks[] = [
-    { path: `${currentId}`, title: "Моя страница", key: "Профиль" },
-    { path: `${currentId}`, title: "Сообщения", key: "Профиль" },
-    { path: `${currentId}`, title: "Выход", key: "Профиль" },
+    { path: `/${currentId}`, title: "Моя страница", key: "Профиль" },
+    { path: `/${currentId}`, title: "Выход", key: "logOut" },
   ];
-
-  const [currentLink, setCurrentLink] = useState("Профиль");
 
   return (
     <>
@@ -55,67 +47,97 @@ const CustomBreadcrumb = () => {
             <h1 className={styles.logo}>Pets</h1>
           </Space>
         </div>
-        <ul className={styles.links}>
-          {mainLinks.map((link, index) => (
-            <li
-              key={index}
-              onClick={() => {
-                setCurrentLink(link.key);
-                setProfileMenu(true);
-              }}
-              className={link.key === currentLink ? styles.activeBtn : ""}
+        <div>
+          <MediaQuery minWidth={650}>
+            <ul className={styles.links}>
+              {mainLink.map((link) => (
+                <NavLink to={link.path} end key={link.key}>
+                  <li
+                    key={link.key}
+                    onClick={() => {
+                      setCurrentLink(link.key);
+                    }}
+                    className={link.key === currentLink ? styles.activeBtn : ""}
+                  >
+                    <Typography.Title level={4} style={{ marginBottom: "0" }}>
+                      {link.title}
+                    </Typography.Title>
+                  </li>
+                </NavLink>
+              ))}
+              <li key="Профиль">
+                <div onClick={() => setShowMenu(!showMenu)}>
+                  <Space.Compact>
+                    <Typography.Title level={4} style={{ marginBottom: "0" }}>
+                      Профиль <DownOutlined style={{ width: "18px" }} />
+                    </Typography.Title>
+                  </Space.Compact>
+                </div>
+              </li>
+              {showMenu && (
+                <div className={styles.dropdownMenuProfileOpen}>
+                  {profileLinks.map((link, index) => (
+                    <NavLink to={link.path} key={link.key}>
+                      <li
+                        key={index}
+                        onClick={() => {
+                          setCurrentLink("");
+                          setShowMenu(true);
+                        }}
+                      >
+                        <Typography.Title level={5}>
+                          {link.title}
+                        </Typography.Title>
+                      </li>
+                    </NavLink>
+                  ))}
+                </div>
+              )}
+            </ul>
+          </MediaQuery>
+
+          <MediaQuery maxWidth={650}>
+            <div
+              className={styles.toggleBtn}
+              onClick={() => setShowMenu(!showMenu)}
             >
-              <NavLink to={link.path} end>
-                <Typography.Title level={4} style={{ marginBottom: "0" }}>
-                  {link.title}
-                </Typography.Title>
-              </NavLink>
-            </li>
-          ))}
-          <li
-            onClick={() => setCurrentLink("Профиль")}
-            className={currentLink === "Профиль" ? styles.activeBtn : ""}
-          >
-            <div onClick={openMenuProfile}>
-              <Space.Compact>
-                <Typography.Title level={4} style={{ marginBottom: "0" }}>
-                  Профиль <DownOutlined style={{ width: "18px" }} />
-                </Typography.Title>
-              </Space.Compact>
+              <MenuOutlined />
             </div>
-          </li>
-        </ul>
-        <div className={styles.toggleBtn} onClick={openMenu}>
-          <MenuOutlined />
+            <div
+              className={
+                !showMenu ? styles.dropdownMenu : styles.dropdownMenuOpen
+              }
+            >
+              {mainLink.map((link, index) => (
+                <li
+                  key={index}
+                  onClick={() => {
+                    setCurrentLink(link.key);
+                    setShowMenu(false);
+                  }}
+                >
+                  <NavLink to={link.path}>
+                    <Typography.Title level={5}>{link.title}</Typography.Title>
+                  </NavLink>
+                </li>
+              ))}
+              {profileLinks.map((link, index) => (
+                <NavLink to={link.path}>
+                  <li
+                    key={index}
+                    onClick={() => {
+                      setCurrentLink("");
+                      setShowMenu(false);
+                    }}
+                  >
+                    <Typography.Title level={5}>{link.title}</Typography.Title>
+                  </li>
+                </NavLink>
+              ))}
+            </div>
+          </MediaQuery>
         </div>
       </div>
-      <div className={showMenu ? styles.dropdownMenu : styles.dropdownMenuOpen}>
-        {mainLinks.map((link, index) => (
-          <li key={index}>
-            <NavLink to={link.path}>
-              <Typography.Title level={5}>{link.title}</Typography.Title>
-            </NavLink>
-          </li>
-        ))}
-        {profileLinks.map((link, index) => (
-          <li key={index} onClick={() => setCurrentLink("Профиль")}>
-            <NavLink to={link.path}>
-              <Typography.Title level={5}>{link.title}</Typography.Title>
-            </NavLink>
-          </li>
-        ))}
-      </div>
-      {showProfilemenu && (
-        <div className={styles.dropdownMenuProfileOpen}>
-          {profileLinks.map((link, index) => (
-            <li key={index} onClick={() => setCurrentLink("Профиль")}>
-              <NavLink to={link.path}>
-                <Typography.Title level={5}>{link.title}</Typography.Title>
-              </NavLink>
-            </li>
-          ))}
-        </div>
-      )}
     </>
   );
 };

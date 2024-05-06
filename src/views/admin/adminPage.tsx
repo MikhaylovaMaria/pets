@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { HomeLK } from "../../components/Cards/HomeLK";
 import AnnouncementList from "../announcement/announcementList";
 import { useParams } from "react-router-dom";
-import { Announment, Article, User } from "../../types/types";
-import { getAnnoncements, getArticles, getUserInfo } from "../../axios";
+import { Announment, Article } from "../../types/types";
+import { getAnnoncements, getArticles } from "../../axios";
 import { Layout } from "../../components/layout/layout";
 import { Button, Flex, Typography } from "antd";
 import SideMenuHome from "../../components/sideMenu/SideMenuHome";
@@ -14,10 +13,10 @@ import { getAnnUser } from "../../redux/slices/announcements";
 import { getUserArticles } from "../../redux/slices/articles";
 import { getCurrentUserData } from "../../redux/slices/user";
 
-const UserPage = () => {
+const AdminPage = () => {
   const { userId }: any = useParams();
   const currentUserId = localStorage.getItem("userId");
-  const [currentUserData, setCurrentUserData] = useState<User>();
+
   const [currentUserAnn, setCurrentUserAnn] = useState<Announment[]>();
   const [currentUserArt, setCurrentUserArt] = useState<Article[]>();
   const [showAnn, setShowAnn] = useState("ann");
@@ -29,17 +28,9 @@ const UserPage = () => {
   // console.log(infoCurUser);
 
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        const { data } = await getUserInfo(userId);
-        setCurrentUserData(data);
-      } catch (error) {
-        console.log("error");
-      }
-    };
     const getAnnUser = async () => {
       try {
-        const { data } = await getAnnoncements(userId);
+        const { data } = await getAnnoncements();
         setCurrentUserAnn(data);
       } catch (error) {
         console.log("error");
@@ -47,22 +38,15 @@ const UserPage = () => {
     };
     const getArtUser = async () => {
       try {
-        const { data } = await getArticles(userId);
+        const { data } = await getArticles();
         setCurrentUserArt(data);
       } catch (error) {
         console.log("error");
       }
     };
-    if (userId === currentUserId) {
-      setCurrentUserAnn(annCurUser);
-      setCurrentUserArt(artCurUser);
-      getUser();
-      // setCurrentUserData(infoCurUser);
-    } else {
-      getUser();
-      getAnnUser();
-      getArtUser();
-    }
+
+    getAnnUser();
+    getArtUser();
   }, [userId, annCurUser, artCurUser, currentUserId]);
 
   return (
@@ -84,7 +68,6 @@ const UserPage = () => {
           style={{ width: "100%", height: "100%", margin: "1%" }}
           vertical
         >
-          {currentUserData && <HomeLK currentUser={currentUserData} />}
           <Typography.Title level={3}>
             <Button
               type="link"
@@ -113,4 +96,4 @@ const UserPage = () => {
   );
 };
 
-export default UserPage;
+export default AdminPage;

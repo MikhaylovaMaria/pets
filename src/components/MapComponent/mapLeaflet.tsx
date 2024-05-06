@@ -1,16 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import L from "leaflet";
 import { MapContainer, Marker, TileLayer, ZoomControl } from "react-leaflet";
 import ClickHandler from "./clickHandler";
 import SideMenuMap from "./sideMenuMap";
-import { SearchProps } from "antd/es/input";
 import MarkerMap from "./marker";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  announcementTypeAll,
-  announcementsInCity,
-  fetchAnnouncements,
-} from "../../redux/slices/announcements";
+import { useSelector } from "react-redux";
+import { announcementTypeAll } from "../../redux/slices/announcements";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 
@@ -26,22 +21,12 @@ export const MapComponent: React.FC<Map> = ({
   setClickedPosition,
   announcements,
 }) => {
-  // const dispatch = useDispatch<any>();
-
-  // useEffect(() => {
-  //   const getAnnoincements = async () => {
-  //     dispatch(fetchAnnouncements());
-  //   };
-  //   getAnnoincements();
-  // }, []);
-
   const [sideMenuOpen, setSideMenuOpen] = useState<boolean>(false);
 
-  const [cityCoordinates, setCityCoordinates] = useState<[number, number]>([
-    59.94, 30.31,
-  ]);
-
-  const [address, setAddress] = useState<string>("");
+  const centerString = localStorage.getItem("centerMap");
+  const center = centerString
+    ? JSON.parse(centerString)
+    : { lat: 59.938935, lng: 30.304154 };
 
   const [announcementTypes, setAnnouncementTypes] = useState([
     { announcementTypeId: 0, announcementTypeName: "Все объявления" },
@@ -54,8 +39,6 @@ export const MapComponent: React.FC<Map> = ({
       setAnnouncementTypes(updatedTypes);
     }
   }, [anotherTypes]);
-
-  // const announcements = useSelector(announcementsInCity);
 
   const [currentTypeAnnoun, setCurrentTypeAnnoun] = useState<number>(
     announcementTypes[0].announcementTypeId
@@ -80,36 +63,16 @@ export const MapComponent: React.FC<Map> = ({
     }
   };
 
-  const handleSearch = async (value: string) => {
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${value}&limit=1`
-      );
-      const data = await response.json();
-      if (data.length > 0) {
-        const { lat, lon } = data[0];
-        setCityCoordinates([parseFloat(lat), parseFloat(lon)]);
-      } else {
-        console.log("Город не найден");
-      }
-    } catch (error) {
-      console.error("Ошибка при поиске города:", error);
-    }
-  };
-
-  const onSearch: SearchProps["onSearch"] = (value) => handleSearch(value);
-
   return (
     <div
       style={{
         width: "100%",
         height: "100%",
-        // overflowY: "hidden",
       }}
     >
       <MapContainer
-        key={cityCoordinates.toString()}
-        center={cityCoordinates}
+        key={center.toString()}
+        center={center}
         zoom={13}
         zoomControl={false}
         style={{ width: "auto" }}
@@ -118,7 +81,7 @@ export const MapComponent: React.FC<Map> = ({
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <ClickHandler onMapClick={onMapClick} setSearchAddress={setAddress} />
+        <ClickHandler onMapClick={onMapClick} />
         <BoundsMap />
         <ZoomControl position="topright" />
 
@@ -126,7 +89,6 @@ export const MapComponent: React.FC<Map> = ({
           <div>
             {sideMenuOpen ? (
               <SideMenuMap
-                onSearch={onSearch}
                 setSideMenu={setSideMenuOpen}
                 announmentTypes={announcementTypes}
                 currentTypeAnnoun={currentTypeAnnoun}
@@ -172,28 +134,3 @@ export const MapComponent: React.FC<Map> = ({
     </div>
   );
 };
-
-// Получить адрес по координатам
-// const getAddressFromCoordinates = async (lat: number, lng: number) => {
-//   try {
-//     const response = await fetch(
-//       `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
-//     );
-//     const data = await response.json();
-
-//     const city =
-//       data.address.city || data.address.town || data.address.village || "";
-//     const road = data.address.road || "";
-//     const houseNumber = data.address.house_number || "";
-//     let address = city;
-//     if (road) {
-//       address += ", " + road;
-//     }
-//     if (houseNumber) {
-//       address += ", " + houseNumber;
-//     }
-//     setAddress(address);
-//   } catch (error) {
-//     console.error("Error fetching address:", error);
-//   }
-// };

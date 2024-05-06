@@ -21,3 +21,22 @@ export const getAddressFromCoordinates = async (lat: number, lng: number) => {
     console.error("Error fetching address:", error);
   }
 };
+
+// Координаты от адреса
+
+// const handleSearch = async (value: string) => {
+//   try {
+//     const response = await fetch(
+//       `https://nominatim.openstreetmap.org/search?format=json&q=${value}&limit=1`
+//     );
+//     const data = await response.json();
+//     if (data.length > 0) {
+//       const { lat, lon } = data[0];
+//       setCityCoordinates([parseFloat(lat), parseFloat(lon)]);
+//     } else {
+//       console.log("Город не найден");
+//     }
+//   } catch (error) {
+//     console.error("Ошибка при поиске города:", error);
+//   }
+// };

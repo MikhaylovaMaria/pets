@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./chatBox.css";
 import { User } from "../../types/types";
 import { chatData } from "../../views/chats/chat";
-import { addMessage, getMessages, getUser } from "../../axios";
+import { addMessage, getMessages, getUser, getUserInfo } from "../../axios";
 import { format } from "timeago.js";
 import InputEmoji from "react-input-emoji";
 import { LeftCircleOutlined } from "@ant-design/icons";
@@ -55,7 +55,7 @@ const ChatBox = ({
     )?.userId;
     const getUserData = async () => {
       try {
-        const { data } = await getUser(companion);
+        const { data } = await getUserInfo(companion);
         setUserData(data);
       } catch (error) {
         console.log(error);

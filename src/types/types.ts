@@ -1,3 +1,5 @@
+import { LatLngExpression } from "leaflet";
+
 export type ErrorWithMessage = {
   status: number;
   data: {
@@ -46,7 +48,7 @@ export interface Announments {
   announcementTypeId: number;
   announcementTitle: string;
   description: string;
-  announcementLocation: [string, string];
+  announcementLocation: [number, number];
   photos: string[] | [];
   announcementStatusId?: string;
 }
@@ -76,7 +78,7 @@ export type smallMapType = {
 export interface Article {
   title: string;
   createdAt: Date;
-  photos: string[] | [];
+  photos: string[];
   description: string;
   userId: string;
   User?: { firstName: string; lastName: string; userId: string };

@@ -1,4 +1,4 @@
-import { Card, Space, Typography } from "antd";
+import { Card, Flex, Image, Space, Typography } from "antd";
 import styles from "./index.module.css";
 
 import "../../utils/dataTyme";
@@ -8,15 +8,25 @@ import { MapLeafletAnn } from "../MapComponent/mapLeafletAnn";
 import { useState } from "react";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 type Props = {
-  announcement: Announment;
+  // announcement: Announment;
+  announcement: any;
 };
 
 export const AnnouncementCard = ({ announcement }: Props) => {
   const [showCard, setshowCard] = useState(false);
+  console.log(announcement.dataValues.description);
   return (
     <Card
       key={announcement.announcementId}
-      title={announcement.announcementTitle}
+      // title={announcement.announcementTitle}
+      title={
+        <>
+          <Space>
+            <button>Подтвердить</button>
+            <button>Удалить</button>
+          </Space>
+        </>
+      }
       style={{
         margin: "5px",
         backgroundColor: "#FFFDF5",
@@ -25,16 +35,23 @@ export const AnnouncementCard = ({ announcement }: Props) => {
       }}
     >
       <Space direction="vertical" style={{ width: "100%" }}>
-        {<Typography.Text>{announcement.description}</Typography.Text>}
+        {
+          <Typography.Text>
+            {announcement.dataValues.description}
+          </Typography.Text>
+        }
         <Typography.Text>
           <button
             style={{ border: "none", background: "none" }}
             onClick={() => setshowCard(!showCard)}
           >
             {!showCard ? (
-              <>
-                Показать на карте <EyeOutlined />
-              </>
+              <Space direction="vertical" align="start">
+                <span>
+                  Показать на карте <EyeOutlined />
+                </span>
+                Показать фотографии объявления
+              </Space>
             ) : (
               <>
                 {" "}
@@ -43,6 +60,7 @@ export const AnnouncementCard = ({ announcement }: Props) => {
             )}
           </button>
         </Typography.Text>
+
         {showCard && (
           <div style={{ width: "100%", height: "200px" }}>
             <MapLeafletAnn

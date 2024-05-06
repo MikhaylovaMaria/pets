@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { User } from "../../types/types";
-import { getUser } from "../../axios";
+import { getUser, getUserInfo } from "../../axios";
 import { Typography } from "antd";
 
 type Props = {
@@ -20,9 +20,11 @@ const Conversation = ({ data, currentUserId, online }: Props) => {
     const companion: string = data.ChatParticipants.find(
       (user: chatParticipants) => user.userId !== currentUserId
     )?.userId;
+
     const getUserData = async () => {
       try {
-        const { data } = await getUser(companion);
+        const { data } = await getUserInfo(companion);
+        console.log(data);
         setUserData(data);
       } catch (error) {
         console.log(error);

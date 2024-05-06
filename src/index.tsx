@@ -16,7 +16,7 @@ root.render(
       theme={{
         components: {
           Radio: {
-            colorPrimary: "#556B2F",
+            colorPrimary: "#ffbd6f",
             algorithm: true,
           },
         },

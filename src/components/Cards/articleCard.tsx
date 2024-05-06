@@ -13,9 +13,10 @@ const { Text } = Typography;
 
 type Props = {
   article: Article;
+  onDelete: (articleId: string) => void;
 };
 
-export const ArticleCard = ({ article }: Props) => {
+export const ArticleCard = ({ article, onDelete }: Props) => {
   const userId = localStorage.getItem("userId");
 
   return (
@@ -28,7 +29,7 @@ export const ArticleCard = ({ article }: Props) => {
             {userId === article.userId && (
               <Space>
                 <EditOutlined />
-                <DeleteOutlined />
+                <DeleteOutlined onClick={() => onDelete(article.articleId)} />
               </Space>
             )}
           </Flex>
@@ -66,14 +67,24 @@ export const ArticleCard = ({ article }: Props) => {
     >
       <Space direction="vertical" style={{ width: "100%" }}>
         {<Typography.Text>{article.description}</Typography.Text>}
-        <Flex justify="center">
-          <Space key={article.articleId} size="small" direction="horizontal">
-            {article.photos.length > 0 &&
-              article.photos.map((a) => (
-                <Image src={a} width={`100/${article.photos.length}%`} />
-              ))}
-          </Space>
-        </Flex>
+
+        <Space
+          key={article.articleId}
+          // size="small"
+          direction="horizontal"
+          style={{ width: "100%" }}
+        >
+          {article.photos.length > 0 &&
+            article.photos.map((a) => (
+              <Flex justify="center" align="center">
+                <Image
+                  key={a}
+                  src={a}
+                  width={`${30 / article.photos.length}%`}
+                />
+              </Flex>
+            ))}
+        </Space>
       </Space>
     </Card>
   );

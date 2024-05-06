@@ -25,6 +25,7 @@ header {
 .navbar .links {
   display: flex;
   gap: 2rem;
+  position: relative;
 }
 
 .toggleBtn {
@@ -35,25 +36,11 @@ header {
 
 .activeBtn {
   background-color: #ffbd6f;
-  /* color: #fff; */
   padding: 0.1rem 0.5rem;
   border: none;
   outline: none;
   border-radius: 20px;
-
-  /* font-size: 0.8rem; */
-  /* font-weight: bold; */
-  /* cursor: pointer; */
-  /* transition: scale 0.2 ease; */
 }
-
-/* .actionbtn:hover {
-  scale: 1.05;
-  color: #fff;
-}
-.activeBtn:active {
-  scale: 0.95;
-} */
 
 .dropdownMenu {
   display: none;
@@ -76,7 +63,6 @@ header {
   position: absolute;
   z-index: 2000;
   right: 0;
-  padding: 12px;
   border-bottom-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
 }
@@ -84,11 +70,13 @@ header {
 .dropdownMenuProfileOpen {
   height: auto;
   background-color: #fffdf5;
+  top:40px;
   text-align: end;
   position: absolute;
   z-index: 1000;
   right: 0;
   padding: 12px;
+  /* margin-top: 40px; */
   border-bottom-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
 }

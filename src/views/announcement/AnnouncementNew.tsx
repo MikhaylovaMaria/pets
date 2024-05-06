@@ -15,7 +15,6 @@ import { RadioChangeEvent } from "antd/lib/radio";
 import { fetchAnnouncementCreate } from "../../redux/slices/announcements";
 
 import { useNavigate } from "react-router-dom";
-console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
 interface announmentsData {
   announcementTypeId?: string;
@@ -87,7 +86,7 @@ const AnnouncementNew = () => {
               values={themeItems}
               name="type"
               onChange={onChange}
-              initValue={themeItems[0].id}
+              // initValue={themeItems[0].id}
             />
           </Col>
           <Col span={24}>
@@ -133,7 +132,7 @@ const AnnouncementNew = () => {
       },
     },
     {
-      title: "Second",
+      title: "Местоположение",
       content: (
         <>
           <Typography.Text>Выберите местоположение на карте </Typography.Text>

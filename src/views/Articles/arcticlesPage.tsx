@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { fetchArticles } from "../../redux/slices/articles";
+import { deleteArticle, fetchArticles } from "../../redux/slices/articles";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { AppDispatch, RootState } from "../../redux/store";
 import { Card, Flex, Row, Typography } from "antd";
-import { ArticlePrevCard } from "../../components/Cards/ArticlePrevCard";
+
 import styles from "./index.module.css";
 import { CustomButton } from "../../components/FormCustom/custom-button/customButton";
 import PaginationFoot from "../../components/pagination/pagination";
@@ -11,12 +11,15 @@ import { Layout } from "../../components/layout/layout";
 import { NavLink } from "react-router-dom";
 import { ArticleCard } from "../../components/Cards/articleCard";
 
-//ПОПРАВИТЬ ТИПЫ
 const ArticlePage = () => {
-  const dispatch = useDispatch<any>();
+  const dispatch: AppDispatch = useDispatch();
   const { status, articles } = useSelector(
     (state: RootState) => state.articles
   );
+
+  const onDelete = (articleId: string) => {
+    dispatch(deleteArticle(articleId));
+  };
   const isArticlesLoading = status === "loading";
   useEffect(() => {
     dispatch(fetchArticles());
@@ -54,7 +57,11 @@ const ArticlePage = () => {
                   />
                 ))
               : articles?.map((ar) => (
-                  <ArticleCard key={ar.articleId} article={ar} />
+                  <ArticleCard
+                    key={ar.articleId}
+                    article={ar}
+                    onDelete={onDelete}
+                  />
                 ))}
           </Flex>
           <Flex justify="center" align="flex-end">

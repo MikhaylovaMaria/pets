@@ -13,7 +13,7 @@ const UserChats = () => {
           height: "100%",
         }}
       >
-        <Flex align="flex-start" style={{ paddingLeft: "40px" }}>
+        <Flex align="flex-start" style={{ paddingLeft: "1%"  }}>
           <SideMenuHome />
         </Flex>
         <Flex

@@ -5,6 +5,7 @@ import styles from "./index.module.css";
 import { menuItem } from "../../types/types";
 import { NavLink, useLocation } from "react-router-dom";
 import { MessageOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
+import MediaQuery from "react-responsive";
 
 const SideMenuHome = () => {
   const userId = localStorage.getItem("userId");
@@ -37,6 +38,7 @@ const SideMenuHome = () => {
         borderRadius: "0",
         position: "relative",
       }}
+      width="max-content"
     >
       <div
         style={{
@@ -56,7 +58,7 @@ const SideMenuHome = () => {
             >
               <Space direction="horizontal">
                 {el.icon}
-                {el.text}
+                <MediaQuery minWidth={650}>{el.text}</MediaQuery>
               </Space>
             </Typography.Title>
           </NavLink>

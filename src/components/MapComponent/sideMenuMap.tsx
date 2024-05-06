@@ -1,12 +1,10 @@
 import { Button, Flex, Space, Typography } from "antd";
-import type { SearchProps } from "antd/es/input/Search";
-import Search from "antd/es/input/Search";
+
 import "./map.css";
 
 import { announcementType } from "../../types/types";
 
 interface SideMenuMapProps {
-  onSearch: SearchProps["onSearch"];
   setSideMenu: (isOpen: boolean) => void;
   announmentTypes: announcementType[];
   currentTypeAnnoun: number;
@@ -14,7 +12,6 @@ interface SideMenuMapProps {
 }
 
 const SideMenuMap: React.FC<SideMenuMapProps> = ({
-  onSearch,
   setSideMenu,
   announmentTypes,
   currentTypeAnnoun,
@@ -22,22 +19,12 @@ const SideMenuMap: React.FC<SideMenuMapProps> = ({
 }) => {
   return (
     <div className="SideBar">
-      <Flex justify="center">
-        <Search
-          onSearch={onSearch}
-          placeholder="Город"
-          style={{
-            marginTop: "20px",
-            width: "90%",
-          }}
-        />
-      </Flex>
       <Flex justify="center" align="flex-start">
         <Space direction="vertical">
           <div>
             <Space
               direction="vertical"
-              style={{ padding: "0", marginTop: "10px" }}
+              style={{ padding: "0", margin: "10px" }}
             >
               <Typography.Text style={{ padding: "0", color: "#72675E" }}>
                 Тип объявления

@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Image, Space, Typography } from "antd";
+import { Card, Flex, Image, Space, Typography } from "antd";
 import { cityNameById } from "../../redux/slices/defaultValues";
 import { useSelector } from "react-redux";
 import { format } from "timeago.js";
@@ -50,7 +50,7 @@ export const HomeLK = ({ currentUser }: Props) => {
       <Flex>
         <Flex justify="flex-start" align="flex-start" style={{ width: "20%" }}>
           <Image
-            // style={{ height: "25%", width: "25%", objectFit: "contain" }}
+            style={{ width: "200px", objectFit: "contain" }}
             src={
               currentUser.avatar ||
               "https://cdn-icons-png.flaticon.com/512/60/60422.png"

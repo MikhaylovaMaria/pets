@@ -51,6 +51,10 @@ const Chats = () => {
   const socket = useRef<Socket | null>(null);
 
   useEffect(() => {
+    console.log(chats);
+  }, [chats]);
+
+  useEffect(() => {
     const getChats = async () => {
       try {
         if (user) {
