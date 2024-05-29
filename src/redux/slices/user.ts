@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { getUserInfo, getUsersFriends } from "../../axios";
+import axios, {
+  createSubscription,
+  deleteSubscription,
+  getUserInfo,
+  getUsersFriends,
+} from "../../axios";
 
 interface User {
   userId: string;
@@ -14,11 +19,11 @@ interface User {
   createdAt: string;
 }
 
-export interface UserFriends {
+export interface UserFriendsParams {
   userId: string;
   firstName: string;
   lastName: string;
-  avatar: string;
+  avatar: string | undefined;
 }
 
 type loginParam = {
@@ -41,7 +46,7 @@ type registerParam = {
 
 interface UserState {
   userData: User | null;
-  userFriends: UserFriends[];
+  userFriends: UserFriendsParams[];
   status: string;
 }
 
@@ -79,6 +84,28 @@ export const fetchUserFriends = createAsyncThunk(
   async (userId: string) => {
     const { data } = await getUsersFriends(userId);
     return data;
+  }
+);
+
+type SubscriptionProps = {
+  authorId: string;
+  friendId: string;
+  user: UserFriendsParams;
+};
+
+export const fetchCreateSubscription = createAsyncThunk(
+  "user/fetchSubscription",
+  async (args: SubscriptionProps) => {
+    const { authorId, friendId } = args;
+    await createSubscription(authorId, friendId);
+  }
+);
+
+export const fetchDeleteSubscription = createAsyncThunk(
+  "user/fetchDeleteSubscription",
+  async (args: SubscriptionProps) => {
+    const { authorId, friendId } = args;
+    await deleteSubscription(authorId, friendId);
   }
 );
 
@@ -132,7 +159,24 @@ const userSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchUserFriends.fulfilled, (state, action) => {
-        state.userFriends.push(action.payload);
+        state.userFriends = action.payload;
+        state.status = "loaded";
+      })
+      .addCase(fetchCreateSubscription.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchCreateSubscription.fulfilled, (state, action) => {
+        state.userFriends.push(action.meta.arg.user);
+        state.status = "loaded";
+      })
+      .addCase(fetchDeleteSubscription.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchDeleteSubscription.fulfilled, (state, action) => {
+        state.userFriends = state.userFriends.filter(
+          (u) => u.userId !== action.meta.arg.user.userId
+        );
+
         state.status = "loaded";
       });
   },
@@ -147,6 +191,8 @@ export const getCurrentUserData = (state: { user: UserState }) =>
 
 export const getUserFriends = (state: { user: UserState }) =>
   state.user.userFriends;
+
+export const userDataStatus = (state: { user: UserState }) => state.user.status;
 
 export const userReducer = userSlice.reducer;
 

@@ -24,7 +24,7 @@ const CustomBreadcrumb = () => {
   const mainLink: mainLinks[] = [
     { path: `/announcements`, title: "Объявления", key: "announcement" },
     { path: `/articles`, title: "Образование", key: "articles" },
-    { path: `/admin`, title: "Админ", key: "админ" },
+    // { path: `/admin`, title: "Админ", key: "админ" },
     { path: `/chats`, title: "Форум", key: "chat" },
   ];
 

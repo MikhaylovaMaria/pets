@@ -81,13 +81,19 @@ const UserPage = () => {
         <Flex
           justify="flex-start"
           align="flex-start"
-          style={{ width: "100%", height: "100%", margin: "1%" }}
+          style={{
+            width: "100%",
+            height: "100%",
+            marginLeft: "1%",
+            marginRight: "1%",
+          }}
           vertical
         >
           {currentUserData && <HomeLK currentUser={currentUserData} />}
           <Typography.Title level={3}>
             <Button
-              type="link"
+              type="text"
+              size="small"
               className={showAnn === "ann" ? styles.active : styles.nonActive}
               onClick={() => setShowAnn("ann")}
             >

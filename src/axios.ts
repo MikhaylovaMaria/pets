@@ -1,6 +1,7 @@
 import axios from "axios";
 import { messageSend } from "./components/chatBox/chatBox";
 import { paramsCreate } from "./redux/slices/articles";
+import { ChatNew } from "./types/types";
 
 const instance = axios.create({
   baseURL: "http://localhost:5000",
@@ -25,11 +26,19 @@ export const getAllUsers = () => instance.get("/users");
 export const getUsersFriends = (userId: string) =>
   instance.get(`users/${userId}/friends`);
 
+export const createSubscription = (userId: string, friendId: string) =>
+  instance.post(`users/${userId}/friends/${friendId}`);
+
+export const deleteSubscription = (userId: string, friendId: string) =>
+  instance.delete(`users/${userId}/friends/${friendId}`);
+
 //Сообщения
 export const getMessages = (id: string) => instance.get(`/message/${id}`);
 
 export const addMessage = (data: messageSend) =>
   instance.post(`/message/`, data);
+
+export const createDialog = (params: any) => instance.post(`/chat`, params);
 
 // Объявления
 export const getAnnoncements = (

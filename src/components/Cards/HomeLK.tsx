@@ -1,10 +1,18 @@
-import { Card, Flex, Image, Space, Typography } from "antd";
+import { Button, Card, Flex, Space, Typography } from "antd";
 import { cityNameById } from "../../redux/slices/defaultValues";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { format } from "timeago.js";
 import "../../utils/dataTyme";
-import { EditOutlined } from "@ant-design/icons";
+import { CloseOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { User } from "../../types/types";
+import { ImageProfile } from "../image/imageProfile";
+import {
+  UserFriendsParams,
+  fetchCreateSubscription,
+  fetchDeleteSubscription,
+  getUserFriends,
+} from "../../redux/slices/user";
+import { AppDispatch } from "../../redux/store";
 const { Text } = Typography;
 
 type Props = {
@@ -12,6 +20,8 @@ type Props = {
 };
 
 export const HomeLK = ({ currentUser }: Props) => {
+  const dispatch: AppDispatch = useDispatch();
+
   const mainUserId = localStorage.getItem("userId");
 
   const cityId = currentUser?.cityId;
@@ -30,15 +40,53 @@ export const HomeLK = ({ currentUser }: Props) => {
     return "";
   });
 
+  const userFriends = useSelector(getUserFriends);
+
+  const isUserFriend = (userId: string) => {
+    return userFriends.some((u) => u.userId === userId);
+  };
+
+  const createSubscription = (friendId: string, userFriend: User) => {
+    const authorId = mainUserId;
+
+    const { avatar, userId, firstName, lastName } = userFriend;
+    const temp = { avatar, userId, firstName, lastName };
+
+    authorId &&
+      dispatch(fetchCreateSubscription({ authorId, friendId, user: temp }));
+  };
+
+  const deleteSubscription = (friendId: string, userFriend: User) => {
+    const authorId = mainUserId;
+    const { avatar, userId, firstName, lastName } = userFriend;
+    const temp = { avatar, userId, firstName, lastName };
+    authorId &&
+      dispatch(fetchDeleteSubscription({ authorId, friendId, user: temp }));
+  };
+
   return !currentUser ? (
     <Card style={{ width: "40vw" }} loading={true} />
   ) : (
     <Card
       title={
-        <Typography.Title level={2} style={{ color: "#3B3632", margin: 0 }}>
+        <Typography.Title level={4} style={{ color: "#3B3632", margin: 0 }}>
           <Flex justify="space-between">
-            Личные данные
-            {currentUser.userId === mainUserId && <EditOutlined />}
+            {currentUser.firstName + " " + currentUser.lastName}
+            {currentUser.userId === mainUserId ? (
+              <EditOutlined />
+            ) : isUserFriend(currentUser.userId) ? (
+              <CloseOutlined
+                onClick={() =>
+                  deleteSubscription(currentUser.userId, currentUser)
+                }
+              />
+            ) : (
+              <PlusOutlined
+                onClick={() =>
+                  createSubscription(currentUser.userId, currentUser)
+                }
+              />
+            )}
           </Flex>
         </Typography.Title>
       }
@@ -49,13 +97,7 @@ export const HomeLK = ({ currentUser }: Props) => {
     >
       <Flex>
         <Flex justify="flex-start" align="flex-start" style={{ width: "20%" }}>
-          <Image
-            style={{ width: "200px", objectFit: "contain" }}
-            src={
-              currentUser.avatar ||
-              "https://cdn-icons-png.flaticon.com/512/60/60422.png"
-            }
-          />
+          <ImageProfile url={currentUser.avatar} />
         </Flex>
         <Flex
           justify="flex-start"
@@ -63,9 +105,9 @@ export const HomeLK = ({ currentUser }: Props) => {
           style={{ marginLeft: "1rem", width: "75%" }}
         >
           <Space direction="vertical">
-            <Typography.Title level={4} style={{ color: "#3B3632" }}>
+            {/* <Typography.Title level={4} style={{ color: "#3B3632" }}>
               {currentUser.firstName + " " + currentUser.lastName}
-            </Typography.Title>
+            </Typography.Title> */}
             <Typography>
               <Text style={{ color: "#7E746B" }}>Страна: </Text>
               <Text style={{ color: "#3B3632" }}>Россия</Text>

@@ -6,7 +6,7 @@ import { Card, Flex, Row, Typography } from "antd";
 
 import styles from "./index.module.css";
 import { CustomButton } from "../../components/FormCustom/custom-button/customButton";
-import PaginationFoot from "../../components/pagination/pagination";
+
 import { Layout } from "../../components/layout/layout";
 import { NavLink } from "react-router-dom";
 import { ArticleCard } from "../../components/Cards/articleCard";
@@ -63,11 +63,6 @@ const ArticlePage = () => {
                     onDelete={onDelete}
                   />
                 ))}
-          </Flex>
-          <Flex justify="center" align="flex-end">
-            <Row justify="center" style={{ paddingTop: "20px" }}>
-              <PaginationFoot />
-            </Row>
           </Flex>
         </Card>
       </Flex>

@@ -84,3 +84,10 @@ export interface Article {
   User?: { firstName: string; lastName: string; userId: string };
   articleId: string;
 }
+
+export interface ChatNew {
+  chatName: string;
+  chatType: string;
+  authorId: string;
+  partnerId: string;
+}

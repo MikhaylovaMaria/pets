@@ -8,6 +8,7 @@ import { User } from "../../types/types";
 import Conversation from "../../components/chatComponents/conversation";
 import ChatBox from "../../components/chatBox/chatBox";
 import { io, Socket } from "socket.io-client";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export interface chatData {
   ChatParticipants: [{ userId: string }];
@@ -41,6 +42,8 @@ type ChatParticipants = {
 // }
 
 const Chats = () => {
+  const loc = useLocation();
+  const chatId = loc.pathname.split("/").at(-1);
   const user: User | null = useSelector(selectisAuth);
 
   const [chats, setChats] = useState<chatData[] | []>([]);
@@ -50,9 +53,20 @@ const Chats = () => {
   const [recieveMessage, setRecieveMessage] = useState<any>(null);
   const socket = useRef<Socket | null>(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    console.log(chats);
-  }, [chats]);
+    if (chatId && chats) {
+      const chat = chats.find((c) => c.chatId === chatId);
+      if (chat) {
+        setCurrentChat(chat);
+      }
+    }
+  }, [chatId, chats.length]);
+
+  // useEffect(() => {
+  //   console.log(chats);
+  // }, [chats]);
 
   useEffect(() => {
     const getChats = async () => {
@@ -109,7 +123,7 @@ const Chats = () => {
             <div className="Chat-list">
               {chats?.map((chat) => (
                 <div key={chat.chatId}>
-                  <div onClick={() => setCurrentChat(chat)}>
+                  <div onClick={() => navigate(`/chats/${chat.chatId}`)}>
                     <Conversation
                       data={chat}
                       currentUserId={user?.userId}

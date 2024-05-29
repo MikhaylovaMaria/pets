@@ -9,8 +9,6 @@ import { LeftCircleOutlined } from "@ant-design/icons";
 import { Typography } from "antd";
 import "../../utils/dataTyme";
 
-// Почему то сообщения неверно показывает в чатах!!
-
 type Props = {
   chat: chatData | null;
   currentUser: string | undefined;
@@ -69,11 +67,14 @@ const ChatBox = ({
     const fetchMessages = async () => {
       try {
         if (chat !== null) {
+          console.log(chat.chatId);
           const { data } = await getMessages(chat.chatId);
+          console.log(data);
+
           setMessages(data);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     if (chat !== null) fetchMessages();
