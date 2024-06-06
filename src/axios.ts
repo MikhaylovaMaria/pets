@@ -4,7 +4,7 @@ import { paramsCreate } from "./redux/slices/articles";
 import { ChatNew } from "./types/types";
 
 const instance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://pets-server-qf29.onrender.com/",
 });
 
 instance.interceptors.request.use((config) => {
