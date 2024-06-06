@@ -83,7 +83,7 @@ const Chats = () => {
   }, [user]);
 
   useEffect(() => {
-    socket.current = io("http://localhost:8800");
+    socket.current = io("https://socket-1bxa.onrender.com");
     socket.current.emit("new-user-add", user?.userId);
     socket.current.on("get-users", (users) => {
       setOnlineUsers(users);
