@@ -4,20 +4,20 @@ import { CustomButton } from "../../components/FormCustom/custom-button/customBu
 import { Layout } from "../../components/layout/layout";
 import CustomUpload from "../../components/FormCustom/custom-upload/customUpload";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+
+import { AppDispatch } from "../../redux/store";
+import { createArticle } from "../../redux/slices/articles";
 import { Navigate } from "react-router-dom";
-import { Paths } from "../../path";
-import { selectisAuth } from "../../redux/slices/user";
 
 interface FormData {
   title: string;
   description: string;
-  photos?: File[] | string[];
+  photos: string[];
 }
 
 const ArticlePageCreate = () => {
-  const dispatch = useDispatch<any>();
-  const isAuth = useSelector(selectisAuth);
+  const dispatch: AppDispatch = useDispatch();
 
   const handleChange = (name: string, value: any) => {
     setFormData({ ...formData, [name]: value });
@@ -34,17 +34,13 @@ const ArticlePageCreate = () => {
   };
 
   const onFinish: FormProps<FormData>["onFinish"] = async () => {
-    const data = await dispatch(formData);
-    console.log(data);
+    dispatch(createArticle(formData));
+    <Navigate to="/articles" />;
   };
 
   const onFinishFailed: FormProps<FormData>["onFinishFailed"] = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-
-  if (!window.localStorage.getItem("token") && isAuth) {
-    return <Navigate to={Paths.home} />;
-  }
 
   return (
     <Layout>

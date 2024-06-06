@@ -2,16 +2,6 @@ li {
   list-style: none;
 }
 
-a {
-  text-decoration: none;
-  color: blueviolet;
-  font-size: 1rem;
-}
-
-a:hover {
-  color: orange;
-}
-
 header {
   position: relative;
   padding: 0 2rem;
@@ -20,12 +10,12 @@ header {
 .navbar {
   width: 100%;
   height: 60px;
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #FFFDF5;
+  background-color: #fffdf5;
 }
 .navbar .logo a {
   font-size: 1rem;
@@ -35,6 +25,7 @@ header {
 .navbar .links {
   display: flex;
   gap: 2rem;
+  position: relative;
 }
 
 .toggleBtn {
@@ -44,24 +35,11 @@ header {
 }
 
 .activeBtn {
-  background-color: orange;
-  color: #fff;
-  padding: 0.5rem 1rem;
+  background-color: #ffbd6f;
+  padding: 0.1rem 0.5rem;
   border: none;
   outline: none;
   border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: scale 0.2 ease;
-}
-
-.actionbtn:hover {
-  scale: 1.05;
-  color: #fff;
-}
-.activeBtn:active {
-  scale: 0.95;
 }
 
 .dropdownMenu {
@@ -71,15 +49,36 @@ header {
   top: 60px;
   height: 0;
   width: 300px;
-  background: red;
+  background: #f5f3ee;
   backdrop-filter: blur(15px);
   border-radius: 10px;
   overflow: hidden;
+  text-align: end;
 }
 
 .dropdownMenuOpen {
   height: auto;
-  background-color: red;
+  background-color: #fffdf5;
+  text-align: end;
+  position: absolute;
+  z-index: 2000;
+  right: 0;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.dropdownMenuProfileOpen {
+  height: auto;
+  background-color: #fffdf5;
+  top:40px;
+  text-align: end;
+  position: absolute;
+  z-index: 1000;
+  right: 0;
+  padding: 12px;
+  /* margin-top: 40px; */
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
 }
 
 .dropdownMenu li {
@@ -89,7 +88,7 @@ header {
   justify-content: center;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 650px) {
   .navbar .links,
   .navbar .activeBtn {
     display: none;
@@ -99,5 +98,8 @@ header {
   }
   .dropdownMenu {
     display: block;
+  }
+  .dropdownMenuProfileOpen {
+    display: none;
   }
 }

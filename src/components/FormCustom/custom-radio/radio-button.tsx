@@ -8,8 +8,8 @@ type ThemeItem = {
 };
 type Props = {
   values: ThemeItem[];
-  onChange: (e: RadioChangeEvent) => void;
-  initValue: number | string;
+  onChange?: (e: RadioChangeEvent) => void;
+  initValue?: number | string;
   name: string;
 };
 

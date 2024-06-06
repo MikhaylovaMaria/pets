@@ -19,17 +19,23 @@ interface City {
 interface CityState {
   cities: City[] | null;
   status: string;
+  bounds: string;
 }
 
 const initialState: CityState = {
   cities: [],
   status: "loading",
+  bounds: localStorage.getItem("bounds") || "",
 };
 
 const defaultValuesSlice = createSlice({
   name: "defaultValues",
   initialState,
-  reducers: {},
+  reducers: {
+    newBoundsCoords: (state, action) => {
+      state.bounds = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCities.pending, (state: CityState) => {
@@ -57,5 +63,10 @@ export const cityNameById = createSelector(
     return city ? city.cityName : "";
   }
 );
+
+export const getBounds = (state: { defaultValues: CityState }) =>
+  state.defaultValues.bounds;
+
+export const { newBoundsCoords } = defaultValuesSlice.actions;
 
 export const defaultReducer = defaultValuesSlice.reducer;

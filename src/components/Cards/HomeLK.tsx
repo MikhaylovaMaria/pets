@@ -1,12 +1,29 @@
-import { Card, Col, Image, Row, Space, Typography } from "antd";
-import { CustomButton } from "../FormCustom/custom-button/customButton";
+import { Button, Card, Flex, Space, Typography } from "antd";
 import { cityNameById } from "../../redux/slices/defaultValues";
-import { useSelector } from "react-redux";
-import { selectisAuth } from "../../redux/slices/user";
+import { useDispatch, useSelector } from "react-redux";
+import { format } from "timeago.js";
+import "../../utils/dataTyme";
+import { CloseOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { User } from "../../types/types";
+import { ImageProfile } from "../image/imageProfile";
+import {
+  UserFriendsParams,
+  fetchCreateSubscription,
+  fetchDeleteSubscription,
+  getUserFriends,
+} from "../../redux/slices/user";
+import { AppDispatch } from "../../redux/store";
 const { Text } = Typography;
 
-export const HomeLK = () => {
-  const currentUser = useSelector(selectisAuth);
+type Props = {
+  currentUser: User;
+};
+
+export const HomeLK = ({ currentUser }: Props) => {
+  const dispatch: AppDispatch = useDispatch();
+
+  const mainUserId = localStorage.getItem("userId");
+
   const cityId = currentUser?.cityId;
 
   const formatedDate = (date: string) => {
@@ -23,132 +40,101 @@ export const HomeLK = () => {
     return "";
   });
 
+  const userFriends = useSelector(getUserFriends);
+
+  const isUserFriend = (userId: string) => {
+    return userFriends.some((u) => u.userId === userId);
+  };
+
+  const createSubscription = (friendId: string, userFriend: User) => {
+    const authorId = mainUserId;
+
+    const { avatar, userId, firstName, lastName } = userFriend;
+    const temp = { avatar, userId, firstName, lastName };
+
+    authorId &&
+      dispatch(fetchCreateSubscription({ authorId, friendId, user: temp }));
+  };
+
+  const deleteSubscription = (friendId: string, userFriend: User) => {
+    const authorId = mainUserId;
+    const { avatar, userId, firstName, lastName } = userFriend;
+    const temp = { avatar, userId, firstName, lastName };
+    authorId &&
+      dispatch(fetchDeleteSubscription({ authorId, friendId, user: temp }));
+  };
+
   return !currentUser ? (
-    <Card style={{ width: "30vw" }} loading={true} />
+    <Card style={{ width: "40vw" }} loading={true} />
   ) : (
     <Card
       title={
-        <Typography.Title level={2} style={{ color: "#3B3632", margin: 0 }}>
-          Личные данные
+        <Typography.Title level={4} style={{ color: "#3B3632", margin: 0 }}>
+          <Flex justify="space-between">
+            {currentUser.firstName + " " + currentUser.lastName}
+            {currentUser.userId === mainUserId ? (
+              <EditOutlined />
+            ) : isUserFriend(currentUser.userId) ? (
+              <CloseOutlined
+                onClick={() =>
+                  deleteSubscription(currentUser.userId, currentUser)
+                }
+              />
+            ) : (
+              <PlusOutlined
+                onClick={() =>
+                  createSubscription(currentUser.userId, currentUser)
+                }
+              />
+            )}
+          </Flex>
         </Typography.Title>
       }
       style={{
         backgroundColor: "#FFFDF5",
+        width: "100%",
       }}
     >
-      <Row style={{ height: "100%" }}>
-        <Col flex="25%" style={{ height: "100%" }}>
-          <Image
-            style={{ height: "50%", width: "100%", objectFit: "contain" }}
-            src={
-              currentUser.avatar ||
-              "https://cdn-icons-png.flaticon.com/512/60/60422.png"
-            }
-          />
-          <Text underline style={{ textAlign: "center" }}>
-            Редактировать профиль
-          </Text>
-        </Col>
-        <Col flex="auto" style={{ paddingLeft: "20px", height: "100%" }}>
-          <Typography.Title level={4} style={{ color: "#3B3632" }}>
-            {currentUser.firstName + " " + currentUser.lastName}
-          </Typography.Title>
-          <Typography>
-            <Text style={{ color: "#7E746B" }}>Страна: </Text>
-            <Text style={{ color: "#3B3632" }}>Россия</Text>
-          </Typography>
-          <Typography>
-            <Text style={{ color: "#7E746B" }}>Город: </Text>
-            <Text style={{ color: "#3B3632" }}>{cityName}</Text>
-          </Typography>
-
-          <Typography>
-            <Text style={{ color: "#7E746B" }}>Дата рождения: </Text>
-            <Text style={{ color: "#3B3632" }}>
-              {formatedDate(currentUser.birthDate)}
-            </Text>
-          </Typography>
-          {/* <Typography>
-            <Text style={{ color: "#7E746B" }}>Телефон: </Text>
-          </Typography> */}
-          <Typography>
-            <Text style={{ color: "#7E746B" }}>Почта: </Text>
-            <Text style={{ color: "#3B3632" }}>{currentUser.email}</Text>
-          </Typography>
-          <Typography>
-            <Text style={{ color: "#7E746B" }}>Дата регистрации: </Text>
-            <Text style={{ color: "#3B3632" }}>
-              {formatedDate(currentUser.createdAt)}
-            </Text>
-          </Typography>
-        </Col>
-      </Row>
+      <Flex>
+        <Flex justify="flex-start" align="flex-start" style={{ width: "20%" }}>
+          <ImageProfile url={currentUser.avatar} />
+        </Flex>
+        <Flex
+          justify="flex-start"
+          align="flex-start"
+          style={{ marginLeft: "1rem", width: "75%" }}
+        >
+          <Space direction="vertical">
+            {/* <Typography.Title level={4} style={{ color: "#3B3632" }}>
+              {currentUser.firstName + " " + currentUser.lastName}
+            </Typography.Title> */}
+            <Typography>
+              <Text style={{ color: "#7E746B" }}>Страна: </Text>
+              <Text style={{ color: "#3B3632" }}>Россия</Text>
+            </Typography>
+            <Typography>
+              <Text style={{ color: "#7E746B" }}>Город: </Text>
+              <Text style={{ color: "#3B3632" }}>{cityName}</Text>
+            </Typography>
+            <Typography>
+              <Text style={{ color: "#7E746B" }}>Дата рождения: </Text>
+              <Text style={{ color: "#3B3632" }}>
+                {formatedDate(currentUser.birthDate)}
+              </Text>
+            </Typography>
+            <Typography>
+              <Text style={{ color: "#7E746B" }}>Почта: </Text>
+              <Text style={{ color: "#3B3632" }}>{currentUser.email}</Text>
+            </Typography>
+            <Typography>
+              <Text style={{ color: "#7E746B" }}>Создан: </Text>
+              <Text style={{ color: "#3B3632" }}>
+                {format(currentUser.createdAt, "ru")}
+              </Text>
+            </Typography>
+          </Space>
+        </Flex>
+      </Flex>
     </Card>
   );
 };
-
-//   return !currentUser ? (
-//     <Card style={{ width: "90vw", margin: "5px" }} loading={true} />
-//   ) : (
-//     <Card
-//       title={
-//         <Typography.Title level={2} style={{ color: "#3B3632", margin: 0 }}>
-//           Личные данные
-//         </Typography.Title>
-//       }
-//       style={{
-//         backgroundColor: "#FFFDF5",
-//       }}
-//     >
-//       <Row style={{ height: "100%" }}>
-//         <Space direction="horizontal">
-//           <Col flex="25%">
-//             <Space direction="vertical" style={{ height: "100%" }}>
-//               <Image
-//                 style={{ height: "25%" }}
-//                 src={
-//                   currentUser.avatar ||
-//                   "https://cdn-icons-png.flaticon.com/512/60/60422.png"
-//                 }
-//               />
-//               <Text underline> Редактировать профиль</Text>
-//             </Space>
-//           </Col>
-//           <Col flex="auto" style={{ paddingLeft: "20px", height: "100%" }}>
-//             <Typography.Title level={4} style={{ color: "#3B3632" }}>
-//               {currentUser.firstName + " " + currentUser.lastName}
-//             </Typography.Title>
-//             <Typography>
-//               <Text style={{ color: "#7E746B" }}>Страна: </Text>
-//               <Text style={{ color: "#3B3632" }}>Россия</Text>
-//             </Typography>
-//             <Typography>
-//               <Text style={{ color: "#7E746B" }}>Город: </Text>
-//               <Text style={{ color: "#3B3632" }}>{currentUser.cityId}</Text>
-//             </Typography>
-
-//             <Typography>
-//               <Text style={{ color: "#7E746B" }}>Дата рождения: </Text>
-//               <Text style={{ color: "#3B3632" }}>
-//                 {formatedDate(currentUser.birthDate)}
-//               </Text>
-//             </Typography>
-//             {/* <Typography>
-//               <Text style={{ color: "#7E746B" }}>Телефон: </Text>
-//             </Typography> */}
-//             <Typography>
-//               <Text style={{ color: "#7E746B" }}>Почта: </Text>
-//               <Text style={{ color: "#3B3632" }}>{currentUser.email}</Text>
-//             </Typography>
-//             <Typography>
-//               <Text style={{ color: "#7E746B" }}>Дата регистрации: </Text>
-//               <Text style={{ color: "#3B3632" }}>
-//                 {formatedDate(currentUser.createdAt)}
-//               </Text>
-//             </Typography>
-//           </Col>
-//         </Space>
-//       </Row>
-//     </Card>
-//   );
-// };

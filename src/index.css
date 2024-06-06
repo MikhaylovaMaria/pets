@@ -20,13 +20,13 @@ a {
 }
 
 .leaflet-container {
-  width: 100vw;
-  height: 85vh;
+  width: 100%;
+  height: 100%;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1500px) {
   body {
-    width: 1200px;
+    width: 1500px;
     margin: 0 auto;
     height: 100vh;
   }

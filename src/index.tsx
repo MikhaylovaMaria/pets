@@ -6,7 +6,6 @@ import { ConfigProvider } from "antd";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 
-
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -16,7 +15,7 @@ root.render(
       theme={{
         components: {
           Radio: {
-            colorPrimary: "#556B2F",
+            colorPrimary: "#ffbd6f",
             algorithm: true,
           },
         },

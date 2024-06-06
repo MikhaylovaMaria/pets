@@ -1,0 +1,22 @@
+.SideBar {
+  width: max-content;
+  background-color: #ffffff;
+  height: max-content;
+  position: absolute;
+  z-index: 3000;
+  margin-top: 6%;
+  padding-bottom: 1%;
+  margin-left: 1%;
+  border-radius: 1rem;
+  padding: 10px;
+}
+
+.button {
+  color: #a79c93;
+  border: 1px solid #a79c93;
+}
+
+.activeButton {
+  color: #fdab4a;
+  border: 1px solid #fdab4a;
+}

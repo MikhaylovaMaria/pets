@@ -1,6 +1,6 @@
 .customCard {
   background-color: #f5f3ee;
-  padding-top: 0rem !important; /* Уменьшенный верхний паддинг */
+  /* padding-top: 0rem !important;  */
   border: 0;
   margin-bottom: 1.5rem;
 }

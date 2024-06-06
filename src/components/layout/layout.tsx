@@ -10,7 +10,6 @@ export const Layout = ({ children, headerView }: Props) => {
   return (
     <div className={styles.main}>
       {!headerView && <CustomBreadcrumb />}
-
       <AntLayout.Content style={{ height: "100%", width: "100%" }}>
         {children}
       </AntLayout.Content>
